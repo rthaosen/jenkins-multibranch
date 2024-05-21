@@ -5,7 +5,11 @@ pipeline {
         NAME="ABC"
         AGE=26
     }
-
+    parameters {
+        string(name: 'TEST', defaultValue: '', description: 'teststring')
+        choice(name: 'VERSION', choices: ['1.1.0','1.2.0'])
+        booleanParam(name: 'executeTests', defaultValue: true)
+    }
     stages {
         stage('build') {
             steps {
@@ -24,6 +28,11 @@ pipeline {
             }
         }
         stage('test') {
+            when {
+                expression {
+                    params.executeTests
+                }
+            }
             steps {
                 echo 'Testing application'
             }
